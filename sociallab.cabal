@@ -1,6 +1,6 @@
 cabal-version:      3.0
 name:               sociallab
-version:            0.1.0.0
+version:            0.1.1.0
 synopsis:           Simulador funcional de compatibilidad y equilibrio de Nash
 description:        Proyecto académico de programación funcional con backend Haskell.
 category:           Education

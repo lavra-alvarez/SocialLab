@@ -19,8 +19,9 @@ El escenario incluido contiene seis personas ficticias, cuatro criterios y dos g
 2. La asignación que maximiza la satisfacción de la persona menos satisfecha.
 3. Los equilibrios de Nash puros, ordenados por bienestar.
 4. La mejor desviación unilateral cuando una asignación no es Nash.
+5. Una red interactiva con grupos, utilidades y compatibilidades mutuas.
 
-La interfaz permite modificar ideales, pesos y utilidad de reserva para observar cómo cambian los resultados.
+La interfaz permite modificar ideales, pesos y utilidad de reserva, alternar entre soluciones y seleccionar personas dentro de la red.
 
 ## Modelo matemático
 
@@ -126,6 +127,7 @@ Las pruebas verifican rangos de similitud, asimetría de afinidad, simetría de 
 | SL-F06 | Detectar Nash | `Nash` | ausencia de desviaciones rentables |
 | SL-F07 | Exponer resultados JSON | `Main` | tres endpoints HTTP |
 | SL-F08 | Editar y recalcular | `static/app.js` | interacción completa en navegador |
+| SL-F09 | Visualizar la red | `static/app.js`, `static/styles.css` | grupos, aristas y selección interactiva |
 | SL-N01 | Núcleo funcional | `src/SocialLab` | módulos puros sin estado destructivo |
 | SL-N02 | Presentación comprensible | UI y README | guion siguiente |
 
@@ -134,9 +136,10 @@ Las pruebas verifican rangos de similitud, asimetría de afinidad, simetría de 
 1. Explicar que compatibilidad, bienestar, equidad y Nash no son equivalentes.
 2. Mostrar los rasgos y editar el peso de un criterio.
 3. Recalcular las 64 asignaciones.
-4. Comparar el óptimo social, la solución equitativa y el mejor Nash.
-5. Enseñar una desviación rentable en una solución no estable.
-6. Cerrar mostrando la función pura que prueba todas las desviaciones.
+4. Alternar la red entre óptimo social, equidad y Nash.
+5. Seleccionar una persona y comparar su grupo, utilidad y conexiones.
+6. Enseñar una desviación rentable en una solución no estable.
+7. Cerrar mostrando la función pura que prueba todas las desviaciones.
 
 ## Alcance y limitaciones
 
