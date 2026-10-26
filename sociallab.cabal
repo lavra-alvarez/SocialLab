@@ -1,0 +1,65 @@
+cabal-version:      3.0
+name:               sociallab
+version:            0.1.0.0
+synopsis:           Simulador funcional de compatibilidad y equilibrio de Nash
+description:        Proyecto académico de programación funcional con backend Haskell.
+category:           Education
+license:            MIT
+license-file:       LICENSE
+author:             Laura Alvarez
+maintainer:         lavra.alvarez@gmail.com
+build-type:         Simple
+extra-doc-files:    README.md, CHANGELOG.md
+extra-source-files: static/index.html, static/styles.css, static/app.js
+
+source-repository head
+    type: git
+    location: https://github.com/lavra-alvarez/SocialLab.git
+
+common warnings
+    ghc-options: -Wall -Wcompat -Widentities
+    default-language: GHC2021
+
+library
+    import: warnings
+    hs-source-dirs: src
+    exposed-modules:
+        SocialLab.Analysis
+        SocialLab.Assignments
+        SocialLab.Compatibility
+        SocialLab.Example
+        SocialLab.Metrics
+        SocialLab.Nash
+        SocialLab.Types
+        SocialLab.Validation
+    build-depends:
+        base >=4.14 && <5,
+        aeson >=2.0 && <3,
+        containers >=0.6 && <0.8,
+        text >=1.2 && <3
+
+executable sociallab-server
+    import: warnings
+    hs-source-dirs: app
+    main-is: Main.hs
+    ghc-options: -threaded -rtsopts -with-rtsopts=-N
+    build-depends:
+        base >=4.14 && <5,
+        aeson >=2.0 && <3,
+        bytestring >=0.10 && <0.13,
+        http-types >=0.12 && <0.13,
+        scotty >=0.20 && <0.30,
+        sociallab,
+        text >=1.2 && <3
+
+test-suite sociallab-test
+    import: warnings
+    type: exitcode-stdio-1.0
+    hs-source-dirs: test
+    main-is: Spec.hs
+    build-depends:
+        base >=4.14 && <5,
+        containers >=0.6 && <0.8,
+        sociallab,
+        text >=1.2 && <3
+

@@ -1,0 +1,7 @@
+dist-newstyle/
+.cabal-sandbox/
+cabal.project.local
+*.hi
+*.o
+.DS_Store
+
