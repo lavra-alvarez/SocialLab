@@ -1,18 +1,21 @@
 :root {
   color-scheme: light;
-  --ink: #17211b;
-  --muted: #647168;
-  --paper: #f5f4ee;
-  --surface: #fffef9;
-  --line: #d9ddd6;
-  --accent: #25684f;
-  --accent-dark: #174735;
-  --accent-soft: #dcebe3;
-  --amber: #a7681f;
-  --amber-soft: #f7ead7;
-  --blue: #3f668f;
-  --danger: #a33e32;
-  --shadow: 0 14px 32px rgba(30, 48, 38, 0.08);
+  --ink: #19172f;
+  --muted: #68657f;
+  --paper: #f5f4ff;
+  --surface: #ffffff;
+  --line: #dedbf1;
+  --accent: #635bff;
+  --accent-dark: #4438ca;
+  --accent-soft: #e9e7ff;
+  --amber: #ff684d;
+  --amber-soft: #fff0eb;
+  --blue: #00a6a6;
+  --danger: #d83b67;
+  --danger-soft: #ffe8ef;
+  --success: #168a70;
+  --success-soft: #e2f8f1;
+  --shadow: 0 16px 36px rgba(68, 56, 202, 0.11);
   font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
 }
 
@@ -28,7 +31,8 @@ body {
   margin: 0;
   color: var(--ink);
   background:
-    radial-gradient(circle at 85% -10%, rgba(37, 104, 79, 0.12), transparent 32rem),
+    radial-gradient(circle at 8% -5%, rgba(99, 91, 255, 0.2), transparent 28rem),
+    radial-gradient(circle at 94% 2%, rgba(255, 104, 77, 0.16), transparent 26rem),
     var(--paper);
 }
 
@@ -41,59 +45,14 @@ select {
 button:focus-visible,
 input:focus-visible,
 select:focus-visible {
-  outline: 3px solid rgba(37, 104, 79, 0.22);
+  outline: 3px solid rgba(99, 91, 255, 0.28);
   outline-offset: 2px;
-}
-
-.topbar {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  width: min(1184px, calc(100% - 40px));
-  margin: 0 auto;
-  padding: 20px 0;
-  border-bottom: 1px solid var(--line);
-}
-
-.brand {
-  display: flex;
-  gap: 12px;
-  align-items: center;
-  color: inherit;
-  text-decoration: none;
-}
-
-.brand-mark {
-  display: grid;
-  place-items: center;
-  width: 42px;
-  height: 42px;
-  color: white;
-  background: var(--accent);
-  border-radius: 12px;
-  font-weight: 800;
-  letter-spacing: -0.04em;
-}
-
-.brand strong {
-  font-size: 1.05rem;
-}
-
-.tech-badge,
-.metric-badge {
-  padding: 7px 11px;
-  border: 1px solid var(--line);
-  border-radius: 999px;
-  color: var(--accent-dark);
-  background: rgba(255, 254, 249, 0.76);
-  font-size: 0.78rem;
-  font-weight: 700;
 }
 
 main {
   width: min(1184px, calc(100% - 40px));
   margin: 0 auto;
-  padding: 20px 0 52px;
+  padding: 28px 0 52px;
 }
 
 h2,
@@ -120,20 +79,20 @@ h3 {
   border: 1px solid var(--line);
   border-radius: 10px;
   color: var(--muted);
-  background: rgba(255, 254, 249, 0.72);
+  background: rgba(255, 255, 255, 0.8);
   font-size: 0.85rem;
 }
 
 .status[data-kind="success"] {
-  color: var(--accent-dark);
-  border-color: #bad6c7;
-  background: var(--accent-soft);
+  color: #0d6955;
+  border-color: #9dddd0;
+  background: var(--success-soft);
 }
 
 .status[data-kind="error"] {
   color: var(--danger);
-  border-color: #e3bbb6;
-  background: #fff0ee;
+  border-color: #f2b4c5;
+  background: var(--danger-soft);
 }
 
 .workspace {
@@ -197,7 +156,7 @@ h3 {
   gap: 5px;
   padding: 5px 8px;
   border-radius: 999px;
-  background: #eef0eb;
+  background: #f0efff;
   font-size: 0.72rem;
 }
 
@@ -283,7 +242,7 @@ h3 {
   gap: 5px;
   padding: 4px;
   border-radius: 10px;
-  background: #eef0eb;
+  background: #efedff;
 }
 
 .network-tab {
@@ -319,12 +278,13 @@ h3 {
   border: 1px solid var(--line);
   border-radius: 14px;
   background:
-    radial-gradient(circle at center, rgba(37, 104, 79, 0.08), transparent 60%),
-    #fbfbf7;
+    radial-gradient(circle at 40% 45%, rgba(99, 91, 255, 0.13), transparent 58%),
+    radial-gradient(circle at 70% 55%, rgba(0, 166, 166, 0.09), transparent 52%),
+    #fcfbff;
 }
 
 .network-edge line {
-  stroke: #7d8981;
+  stroke: #8582a3;
   stroke-linecap: round;
   opacity: var(--edge-opacity);
   transition: opacity 160ms ease, stroke 160ms ease;
@@ -437,7 +397,7 @@ h3 {
   padding: 16px;
   border: 1px solid var(--line);
   border-radius: 14px;
-  background: #fbfbf7;
+  background: #fcfbff;
 }
 
 .network-detail-header {
@@ -597,12 +557,12 @@ h3 {
   padding: 16px;
   border: 1px solid var(--line);
   border-radius: 13px;
-  background: #fbfbf7;
+  background: #fcfbff;
 }
 
 .assignment-card[data-stable="true"] {
-  border-color: #9bc3ae;
-  background: #f4faf6;
+  border-color: #8ad8c8;
+  background: #f0fcf8;
 }
 
 .assignment-card header {
@@ -676,7 +636,7 @@ h3 {
   height: 6px;
   overflow: hidden;
   border-radius: 99px;
-  background: #e6e9e3;
+  background: #e9e7f5;
 }
 
 .utility-fill {
@@ -828,17 +788,9 @@ h3 {
 }
 
 @media (max-width: 680px) {
-  .topbar {
-    width: min(100% - 24px, 1184px);
-    padding: 16px 0;
-  }
-
-  .tech-badge {
-    display: none;
-  }
-
   main {
     width: min(100% - 24px, 1184px);
+    padding-top: 16px;
   }
 
   .summary-grid,

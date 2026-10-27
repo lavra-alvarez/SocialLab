@@ -140,6 +140,7 @@ Las pruebas verifican rangos de similitud, afinidades, 62 distribuciones de equi
 | SL-F10 | Seleccionar formación | `Example`, `Main`, `static/app.js` | dos escenarios con seis personas |
 | SL-F11 | Formar parejas estables | `Assignments`, `Matching` | 15 matchings y ausencia de bloqueos |
 | SL-F12 | Mostrar el recálculo | `static/app.js`, `static/styles.css` | transiciones de relaciones y puntuaciones |
+| SL-F13 | Priorizar resultados | `static/index.html`, `static/styles.css` | vista sin cabecera ni campos decorativos |
 | SL-N01 | Núcleo funcional | `src/SocialLab` | módulos puros sin estado destructivo |
 | SL-N02 | Presentación comprensible | UI y README | guion siguiente |
 
@@ -174,4 +175,5 @@ Las decisiones se encuentran en:
 - [`ai-context/initiatives/sociallab-functional-social-simulator`](ai-context/initiatives/sociallab-functional-social-simulator)
 - [`ai-context/initiatives/sociallab-network-visualization`](ai-context/initiatives/sociallab-network-visualization)
 - [`ai-context/initiatives/sociallab-scenarios-and-recalculation-feedback`](ai-context/initiatives/sociallab-scenarios-and-recalculation-feedback)
+- [`ai-context/initiatives/sociallab-results-only-visual-refresh`](ai-context/initiatives/sociallab-results-only-visual-refresh)
 

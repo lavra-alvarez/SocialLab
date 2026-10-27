@@ -7,6 +7,7 @@
 - Nash para equipos y estabilidad por parejas bloqueantes para matching.
 - Relaciones activas superpuestas en la red de compatibilidad.
 - Animación de conexiones agregadas, eliminadas y recalculadas.
+- Interfaz centrada en resultados con paleta índigo, coral y turquesa.
 - Once comprobaciones automatizadas del núcleo funcional.
 
 ## 0.1.1 - 2026-10-26

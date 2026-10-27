@@ -13,7 +13,6 @@ const state = {
 const elements = {
   status: document.querySelector("#status"),
   scenarioMode: document.querySelector("#scenario-mode"),
-  scenarioTitle: document.querySelector("#scenario-title"),
   personSelect: document.querySelector("#person-select"),
   personSummary: document.querySelector("#person-summary"),
   preferencesEditor: document.querySelector("#preferences-editor"),
@@ -58,10 +57,6 @@ function bindEvents() {
   elements.personSelect.addEventListener("change", (event) => {
     state.selectedPersonId = event.target.value;
     renderPersonEditor();
-  });
-
-  elements.scenarioTitle.addEventListener("input", (event) => {
-    state.scenario.title = event.target.value;
   });
 
   elements.outsideOption.addEventListener("input", (event) => {
@@ -143,7 +138,6 @@ function renderEditor() {
     )
     .join("");
   elements.scenarioMode.value = state.scenario.mode;
-  elements.scenarioTitle.value = state.scenario.title;
   elements.personSelect.innerHTML = state.scenario.people
     .map((person) => `<option value="${escapeHtml(person.id)}">${escapeHtml(person.name)}</option>`)
     .join("");
@@ -704,7 +698,7 @@ function clamp(value, minimum, maximum) {
 function heatColor(score) {
   const intensity = clamp(score / 100, 0, 1);
   const alpha = 0.08 + intensity * 0.36;
-  return `rgba(37, 104, 79, ${alpha})`;
+  return `rgba(99, 91, 255, ${alpha})`;
 }
 
 function setStatus(message, kind = "neutral") {
