@@ -31,6 +31,9 @@
             <button id="reset-button" class="button button-secondary" type="button">Restablecer</button>
           </div>
 
+          <label class="field-label" for="scenario-mode">Formación</label>
+          <select id="scenario-mode" class="text-input"></select>
+
           <label class="field-label" for="scenario-title">Escenario</label>
           <input id="scenario-title" class="text-input" type="text" maxlength="80" />
 
@@ -57,7 +60,7 @@
               <div class="network-tabs" role="group" aria-label="Asignación mostrada">
                 <button class="network-tab is-active" type="button" data-network-mode="social">Óptimo</button>
                 <button class="network-tab" type="button" data-network-mode="fair">Equidad</button>
-                <button class="network-tab" type="button" data-network-mode="nash">Nash</button>
+                <button id="stability-tab" class="network-tab" type="button" data-network-mode="stable">Nash</button>
               </div>
             </div>
             <div class="network-layout">
@@ -89,7 +92,7 @@
       </section>
     </main>
 
-    <script type="module" src="/app.js?v=2"></script>
+    <script type="module" src="/app.js?v=3"></script>
   </body>
 </html>
 

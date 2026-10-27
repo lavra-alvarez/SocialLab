@@ -4,12 +4,14 @@
 module SocialLab.Types
   ( Preference (..)
   , Person (..)
+  , ScenarioMode (..)
   , Scenario (..)
   , Assignment
   , AffinityCell (..)
   , CompatibilityCell (..)
   , AssignmentMetrics (..)
   , Deviation (..)
+  , BlockingPair (..)
   , AssignmentResult (..)
   , AnalysisResponse (..)
   , ErrorResponse (..)
@@ -23,6 +25,7 @@ import Data.Aeson
   , genericParseJSON
   , genericToJSON
   , object
+  , withText
   , withObject
   , (.:)
   , (.=)
@@ -67,8 +70,25 @@ instance ToJSON Person where
 instance FromJSON Person where
   parseJSON = genericParseJSON (prefixedOptions "person")
 
+data ScenarioMode
+  = TeamFormation
+  | PairFormation
+  deriving (Eq, Show, Generic)
+
+instance ToJSON ScenarioMode where
+  toJSON TeamFormation = toJSON ("teams" :: Text)
+  toJSON PairFormation = toJSON ("pairs" :: Text)
+
+instance FromJSON ScenarioMode where
+  parseJSON = withText "ScenarioMode" $ \value ->
+    case value of
+      "teams" -> pure TeamFormation
+      "pairs" -> pure PairFormation
+      _ -> fail "El modo debe ser teams o pairs."
+
 data Scenario = Scenario
   { scenarioTitle :: Text
+  , scenarioMode :: ScenarioMode
   , scenarioGroupCount :: Int
   , scenarioPeople :: [Person]
   }
@@ -139,11 +159,26 @@ instance ToJSON Deviation where
 instance FromJSON Deviation where
   parseJSON = genericParseJSON (prefixedOptions "deviation")
 
+data BlockingPair = BlockingPair
+  { blockingFirstId :: Text
+  , blockingSecondId :: Text
+  , blockingFirstGain :: Double
+  , blockingSecondGain :: Double
+  }
+  deriving (Eq, Show, Generic)
+
+instance ToJSON BlockingPair where
+  toJSON = genericToJSON (prefixedOptions "blocking")
+
+instance FromJSON BlockingPair where
+  parseJSON = genericParseJSON (prefixedOptions "blocking")
+
 data AssignmentResult = AssignmentResult
   { resultAssignment :: Assignment
   , resultMetrics :: AssignmentMetrics
-  , resultIsNash :: Bool
+  , resultIsStable :: Bool
   , resultDeviations :: [Deviation]
+  , resultBlockingPairs :: [BlockingPair]
   }
   deriving (Eq, Show, Generic)
 
@@ -160,7 +195,7 @@ data AnalysisResponse = AnalysisResponse
   , analysisCompatibilities :: [CompatibilityCell]
   , analysisSocialOptimum :: AssignmentResult
   , analysisFairOptimum :: AssignmentResult
-  , analysisNashEquilibria :: [AssignmentResult]
+  , analysisStableAssignments :: [AssignmentResult]
   }
   deriving (Eq, Show, Generic)
 

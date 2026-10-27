@@ -6,18 +6,22 @@ module SocialLab.Nash
 
 import qualified Data.Map.Strict as Map
 import Data.Maybe (fromMaybe)
-import SocialLab.Assignments (movePerson)
+import SocialLab.Assignments (membersInGroup, movePerson)
 import SocialLab.Metrics (individualUtility)
 import SocialLab.Types
 
 allDeviations :: Scenario -> Assignment -> [Deviation]
 allDeviations scenario assignment =
-  [ buildDeviation person currentGroup alternativeGroup
-  | person <- scenarioPeople scenario
-  , let currentGroup = fromMaybe (-1) (Map.lookup (personId person) assignment)
-  , alternativeGroup <- [0 .. scenarioGroupCount scenario - 1]
-  , alternativeGroup /= currentGroup
-  ]
+  case scenarioMode scenario of
+    PairFormation -> []
+    TeamFormation ->
+      [ buildDeviation person currentGroup alternativeGroup
+      | person <- scenarioPeople scenario
+      , let currentGroup = fromMaybe (-1) (Map.lookup (personId person) assignment)
+      , length (membersInGroup currentGroup assignment) > 1
+      , alternativeGroup <- [0 .. scenarioGroupCount scenario - 1]
+      , alternativeGroup /= currentGroup
+      ]
   where
     buildDeviation person currentGroup alternativeGroup =
       Deviation

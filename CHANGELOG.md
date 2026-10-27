@@ -1,5 +1,14 @@
 # Changelog
 
+## 0.2.0 - 2026-10-27
+
+- Selector entre dos equipos y tres parejas para seis personas.
+- 62 distribuciones válidas de equipos y 15 matchings perfectos.
+- Nash para equipos y estabilidad por parejas bloqueantes para matching.
+- Relaciones activas superpuestas en la red de compatibilidad.
+- Animación de conexiones agregadas, eliminadas y recalculadas.
+- Once comprobaciones automatizadas del núcleo funcional.
+
 ## 0.1.1 - 2026-10-26
 
 - Red SVG interactiva por solución y grupo.

@@ -13,7 +13,7 @@ import SocialLab.Types
 
 validateScenario :: Scenario -> [Text]
 validateScenario scenario =
-  groupErrors
+  modeErrors
     <> peopleCountErrors
     <> duplicateIdErrors
     <> concatMap (validatePerson criteria) people
@@ -21,11 +21,13 @@ validateScenario scenario =
     people = scenarioPeople scenario
     criteria = maybe Set.empty (Map.keysSet . personTraits) (safeHead people)
 
-    groupErrors =
-      ["El MVP requiere exactamente 2 grupos." | scenarioGroupCount scenario /= 2]
+    modeErrors =
+      case scenarioMode scenario of
+        TeamFormation -> ["El escenario de equipos requiere exactamente 2 grupos." | scenarioGroupCount scenario /= 2]
+        PairFormation -> ["El escenario de parejas requiere exactamente 3 grupos." | scenarioGroupCount scenario /= 3]
 
     peopleCountErrors =
-      ["El escenario debe contener entre 2 y 8 personas." | length people < 2 || length people > 8]
+      ["Los escenarios demostrativos requieren exactamente 6 personas." | length people /= 6]
 
     duplicateIdErrors =
       map ("Identificador duplicado: " <>) (duplicates (map personId people))

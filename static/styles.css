@@ -10,6 +10,7 @@
   --accent-soft: #dcebe3;
   --amber: #a7681f;
   --amber-soft: #f7ead7;
+  --blue: #3f668f;
   --danger: #a33e32;
   --shadow: 0 14px 32px rgba(30, 48, 38, 0.08);
   font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
@@ -329,6 +330,47 @@ h3 {
   transition: opacity 160ms ease, stroke 160ms ease;
 }
 
+.network-edge.has-score-change line {
+  animation: edge-score-change 900ms ease-out;
+}
+
+.network-relation line {
+  stroke-linecap: round;
+  stroke-width: 7;
+  opacity: 0.72;
+  transition: opacity 180ms ease;
+}
+
+.network-relation.group-0 line {
+  stroke: var(--accent);
+}
+
+.network-relation.group-1 line {
+  stroke: var(--amber);
+}
+
+.network-relation.group-2 line {
+  stroke: var(--blue);
+}
+
+.network-relation.is-added line {
+  stroke-dasharray: 1;
+  animation: relation-enter 1050ms ease-out;
+}
+
+.network-relation.is-removed line {
+  stroke: var(--danger);
+  animation: relation-exit 900ms ease-out forwards;
+}
+
+.network-relation.is-muted line {
+  opacity: 0.04;
+}
+
+.network-relation.is-active line {
+  opacity: 0.9;
+}
+
 .network-edge.is-active line {
   stroke: var(--accent);
   opacity: 0.78;
@@ -347,7 +389,7 @@ h3 {
   stroke: var(--surface);
   stroke-width: 5;
   filter: drop-shadow(0 5px 6px rgba(23, 33, 27, 0.13));
-  transition: r 160ms ease, stroke 160ms ease, stroke-width 160ms ease;
+  transition: r 160ms ease, fill 260ms ease, stroke 160ms ease, stroke-width 160ms ease;
 }
 
 .network-node.group-0 circle {
@@ -356,6 +398,14 @@ h3 {
 
 .network-node.group-1 circle {
   fill: var(--amber);
+}
+
+.network-node.group-2 circle {
+  fill: var(--blue);
+}
+
+.network-node.is-reassigned circle {
+  animation: node-reassigned 900ms ease-out;
 }
 
 .network-node:hover circle,
@@ -470,6 +520,10 @@ h3 {
   background: var(--amber);
 }
 
+.group-dot.group-2 {
+  background: var(--blue);
+}
+
 .network-clear {
   padding: 5px 8px;
   border: 0;
@@ -546,7 +600,7 @@ h3 {
   background: #fbfbf7;
 }
 
-.assignment-card[data-nash="true"] {
+.assignment-card[data-stable="true"] {
   border-color: #9bc3ae;
   background: #f4faf6;
 }
@@ -641,9 +695,72 @@ h3 {
   line-height: 1.45;
 }
 
-.nash-note {
+.stable-note {
   color: var(--accent-dark);
   background: var(--accent-soft);
+}
+
+@keyframes edge-score-change {
+  from {
+    opacity: var(--previous-opacity);
+    stroke-width: var(--previous-width);
+  }
+  to {
+    opacity: var(--edge-opacity);
+    stroke-width: var(--edge-width);
+  }
+}
+
+@keyframes relation-enter {
+  0% {
+    stroke-dashoffset: 1;
+    opacity: 0;
+    filter: drop-shadow(0 0 0 rgba(255, 196, 75, 0));
+  }
+  45% {
+    opacity: 1;
+    filter: drop-shadow(0 0 9px rgba(255, 196, 75, 0.95));
+  }
+  100% {
+    stroke-dashoffset: 0;
+    opacity: 0.72;
+    filter: drop-shadow(0 0 0 rgba(255, 196, 75, 0));
+  }
+}
+
+@keyframes relation-exit {
+  0% {
+    opacity: 0.9;
+    filter: drop-shadow(0 0 8px rgba(163, 62, 50, 0.72));
+  }
+  100% {
+    opacity: 0;
+    filter: drop-shadow(0 0 0 rgba(163, 62, 50, 0));
+  }
+}
+
+@keyframes node-reassigned {
+  0%,
+  100% {
+    stroke: var(--surface);
+    stroke-width: 5;
+  }
+  45% {
+    stroke: #f5c451;
+    stroke-width: 10;
+    filter: drop-shadow(0 0 11px rgba(245, 196, 81, 0.82));
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    scroll-behavior: auto !important;
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
 }
 
 .table-scroll {

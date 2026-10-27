@@ -8,7 +8,7 @@ import qualified Data.ByteString.Lazy.Char8 as LazyByteString
 import Control.Exception (SomeException)
 import Network.HTTP.Types.Status (badRequest400)
 import SocialLab.Analysis (analyzeScenario)
-import SocialLab.Example (exampleScenario)
+import SocialLab.Example (exampleScenario, exampleScenarios)
 import SocialLab.Types (ErrorResponse (..), Scenario)
 import System.Environment (getArgs, lookupEnv)
 import System.Exit (exitFailure)
@@ -55,6 +55,8 @@ routes = do
     json (object ["status" .= ("ok" :: String)])
 
   get "/api/scenario" $ json exampleScenario
+
+  get "/api/scenarios" $ json exampleScenarios
 
   post "/api/analyze" $ do
     scenario <-

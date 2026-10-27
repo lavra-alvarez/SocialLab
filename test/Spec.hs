@@ -6,9 +6,10 @@ import Control.Monad (forM_, unless)
 import qualified Data.Map.Strict as Map
 import Data.Text (Text)
 import SocialLab.Analysis (analyzeScenario, buildAssignmentResult)
-import SocialLab.Assignments (allAssignments)
+import SocialLab.Assignments (allAssignments, membersInGroup)
 import SocialLab.Compatibility (directedAffinity, mutualCompatibility, similarity)
-import SocialLab.Example (exampleScenario)
+import SocialLab.Example (exampleScenarios)
+import SocialLab.Matching (blockingPairs)
 import SocialLab.Metrics (individualUtility)
 import SocialLab.Nash (profitableDeviations)
 import SocialLab.Types
@@ -20,11 +21,13 @@ main = do
   run "la similitud respeta los extremos" testSimilarity
   run "la afinidad dirigida puede ser asimétrica" testDirectedAffinity
   run "la compatibilidad mutua es simétrica" testMutualCompatibility
-  run "se generan 2^n asignaciones" testAssignmentCount
+  run "se generan 62 distribuciones no vacías" testTeamAssignmentCount
+  run "se generan 15 matchings perfectos" testPairAssignmentCount
+  run "cada matching contiene tres parejas" testPairAssignmentShape
   run "una persona sola recibe su utilidad de reserva" testOutsideOption
-  run "los equilibrios no tienen desviaciones rentables" testNashResults
-  run "el óptimo social domina las demás asignaciones" testSocialOptimum
-  run "el ejemplo distingue eficiencia de estabilidad" testDemonstrationContrast
+  run "los equilibrios Nash no tienen desviaciones rentables" testNashResults
+  run "los matchings estables no tienen parejas bloqueantes" testStableMatchingResults
+  run "los óptimos sociales dominan las demás asignaciones" testSocialOptima
   putStrLn "\nTodas las pruebas de SocialLab pasaron."
 
 run :: String -> IO () -> IO ()
@@ -34,7 +37,7 @@ run name test = do
 
 testValidScenario :: IO ()
 testValidScenario =
-  assertEqual [] (validateScenario exampleScenario)
+  forM_ exampleScenarios (assertEqual [] . validateScenario)
 
 testSimilarity :: IO ()
 testSimilarity = do
@@ -69,9 +72,23 @@ testMutualCompatibility = do
       bruno = findPerson "bruno"
   assertApprox (mutualCompatibility ana bruno) (mutualCompatibility bruno ana)
 
-testAssignmentCount :: IO ()
-testAssignmentCount =
-  assertEqual 64 (length (allAssignments exampleScenario))
+testTeamAssignmentCount :: IO ()
+testTeamAssignmentCount = do
+  assertEqual 62 (length assignments)
+  assertBool (all hasTwoNonEmptyTeams assignments)
+  where
+    assignments = allAssignments teamScenario
+    hasTwoNonEmptyTeams assignment =
+      all (not . null . (`membersInGroup` assignment)) [0, 1]
+
+testPairAssignmentCount :: IO ()
+testPairAssignmentCount =
+  assertEqual 15 (length (allAssignments pairScenario))
+
+testPairAssignmentShape :: IO ()
+testPairAssignmentShape =
+  forM_ (allAssignments pairScenario) $ \assignment ->
+    assertEqual [2, 2, 2] [length (membersInGroup groupId assignment) | groupId <- [0, 1, 2]]
 
 testOutsideOption :: IO ()
 testOutsideOption = do
@@ -79,44 +96,49 @@ testOutsideOption = do
       assignment =
         Map.fromList
           [ (personId person, if personId person == "ana" then 0 else 1)
-          | person <- scenarioPeople exampleScenario
+          | person <- scenarioPeople teamScenario
           ]
-  assertApprox (personOutsideOption ana) (individualUtility exampleScenario assignment ana)
+  assertApprox (personOutsideOption ana) (individualUtility teamScenario assignment ana)
 
 testNashResults :: IO ()
 testNashResults =
-  case analyzeScenario exampleScenario of
+  case analyzeScenario teamScenario of
     Left errors -> fail (show errors)
     Right analysis -> do
-      assertBool (not (null (analysisNashEquilibria analysis)))
+      assertBool (not (null (analysisStableAssignments analysis)))
       forM_
-        (analysisNashEquilibria analysis)
-        (\result -> assertEqual [] (profitableDeviations exampleScenario (resultAssignment result)))
+        (analysisStableAssignments analysis)
+        (\result -> assertEqual [] (profitableDeviations teamScenario (resultAssignment result)))
 
-testSocialOptimum :: IO ()
-testSocialOptimum =
-  case analyzeScenario exampleScenario of
+testStableMatchingResults :: IO ()
+testStableMatchingResults =
+  case analyzeScenario pairScenario of
+    Left errors -> fail (show errors)
+    Right analysis -> do
+      assertBool (not (null (analysisStableAssignments analysis)))
+      forM_
+        (analysisStableAssignments analysis)
+        (\result -> assertEqual [] (blockingPairs pairScenario (resultAssignment result)))
+
+testSocialOptima :: IO ()
+testSocialOptima =
+  forM_ exampleScenarios assertSocialOptimum
+
+assertSocialOptimum :: Scenario -> IO ()
+assertSocialOptimum scenario =
+  case analyzeScenario scenario of
     Left errors -> fail (show errors)
     Right analysis -> do
       let bestWelfare = metricsCollectiveWelfare (resultMetrics (analysisSocialOptimum analysis))
           otherWelfares =
-            [ metricsCollectiveWelfare (resultMetrics (buildAssignmentResult exampleScenario assignment))
-            | assignment <- allAssignments exampleScenario
+            [ metricsCollectiveWelfare (resultMetrics (buildAssignmentResult scenario assignment))
+            | assignment <- allAssignments scenario
             ]
       assertBool (all (<= bestWelfare + tolerance) otherWelfares)
 
-testDemonstrationContrast :: IO ()
-testDemonstrationContrast =
-  case analyzeScenario exampleScenario of
-    Left errors -> fail (show errors)
-    Right analysis -> do
-      assertBool (not (resultIsNash (analysisSocialOptimum analysis)))
-      assertBool (resultIsNash (analysisFairOptimum analysis))
-      assertBool (resultAssignment (analysisSocialOptimum analysis) /= resultAssignment (analysisFairOptimum analysis))
-
 findPerson :: Text -> Person
 findPerson identifier =
-  case filter ((== identifier) . personId) (scenarioPeople exampleScenario) of
+  case filter ((== identifier) . personId) (scenarioPeople teamScenario) of
     person : _ -> person
     [] -> error "Persona de prueba inexistente"
 
@@ -133,4 +155,16 @@ assertApprox expected actual =
 
 tolerance :: Double
 tolerance = 1.0e-7
+
+teamScenario :: Scenario
+teamScenario = scenarioWithMode TeamFormation
+
+pairScenario :: Scenario
+pairScenario = scenarioWithMode PairFormation
+
+scenarioWithMode :: ScenarioMode -> Scenario
+scenarioWithMode mode =
+  case filter ((== mode) . scenarioMode) exampleScenarios of
+    scenario : _ -> scenario
+    [] -> error "Escenario de prueba inexistente"
 
